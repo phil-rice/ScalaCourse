@@ -1,6 +1,12 @@
 package training
 
 
+trait PersonFixture extends PhoneFixture{
+
+  val person1 = Person(1, "Phil", List(phone1, phone2))
+  val person2 = Person(2, "Bob", List())
+  val person3 = Person(3, "Jill", List(phone3))
+}
 class PersonParserSpec extends TrainingSpec with PhoneFixture {
   behavior of "DefaultPersonParser"
   val defaultPersonParser = implicitly[PersonParser].apply(phoneMap) _
@@ -13,12 +19,9 @@ class PersonParserSpec extends TrainingSpec with PhoneFixture {
   }
 }
 
-class PersonSpec extends TrainingSpec with PhoneFixture {
+class PersonSpec extends TrainingSpec with PersonFixture {
   behavior of "Person.parse"
 
-  val person1 = Person(1, "Phil", List(phone1, phone2))
-  val person2 = Person(2, "Bob", List())
-  val person3 = Person(3, "Jill", List(phone3))
 
   it should "delegate to PersonParser" in {
     implicit val phoneParser = mock[PersonParser]

@@ -5,7 +5,9 @@ import java.io.InputStream
 import scala.io.Source
 
 
-case class Phone(personId: Int, phoneType: String, number: String)
+case class Phone(personId: Int, phoneType: String, number: String) extends ToJson {
+  def toJson = s"""{"type": "$phoneType", "number": "$number"}"""
+}
 
 
 object Phone {

@@ -5,7 +5,10 @@ import java.io.InputStream
 import scala.io.Source
 
 
-case class Person(id: Int, name: String, phones: List[Phone] = List())
+case class Person(id: Int, name: String, phones: List[Phone] = List()) extends ToJson {
+  def toJson = s"""{"name": "$name", "phones": ${phones.map(_.toJson).mkString("[", ",", "]")}}"""
+}
+
 
 object Person {
   def loadFromStream(phoneMap: PhoneMap)(stream: InputStream)(implicit personParser: PersonParser): Iterator[Person] =
