@@ -10,12 +10,11 @@ object HelloWorld extends App {
 
   person match {
     case Person(id, name, list) =>    // id, name and list are values we can use
-    case p@Person(id, name, list) =>  // p is also available to us and is the whole person
     case Person(_, name, _) =>        // we don’t care about the id or list, so only the name is available
     case Person(id, name, List(phone1)) => //only matches if there is a single phone, and it is in variable phone1
+    case _ =>                         // matches everything. Like ‘else’
     case Person(_, _, List(phone1, phone2)) => // matches if there are exactly two phones
     case Person(id, name, List(Phone(_, type1, num1), Phone(_, type2, num2))) =>
-    case _ =>                         // matches everything. Like ‘else’
   }
 
   val p@Person(id, name, list) = person

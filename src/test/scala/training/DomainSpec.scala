@@ -3,18 +3,18 @@ package training
 import org.scalamock.scalatest.MockFactory
 import org.scalatest.{FlatSpec, Matchers}
 
-import scala.io.{BufferedSource, Source}
-
 trait TrainingSpec extends FlatSpec with Matchers with MockFactory
 
 
 class PhoneParserSpec extends TrainingSpec {
 
-  behavior of "PhoneParser"
+  behavior of "DefaultPhoneParser"
+
+  val defaultPhoneParser = implicitly[PhoneParser]
 
   it should "parse a string and turn it into a Phone" in {
-    PhoneParser("1,mobile,+44 123 456 777") shouldBe Phone(1, "mobile", "+44 123 456 777")
-    PhoneParser("3,mobile,  07767 555 5555") shouldBe Phone(3, "mobile", "07767 555 5555")
+    defaultPhoneParser("1,mobile,+44 123 456 777") shouldBe Phone(1, "mobile", "+44 123 456 777")
+    defaultPhoneParser("3,mobile,  07767 555 5555") shouldBe Phone(3, "mobile", "07767 555 5555")
   }
 }
 
@@ -27,10 +27,10 @@ class PhoneSpec extends TrainingSpec {
   behavior of "Phone.parse"
 
   it should "delegate to PhoneParser" in {
-    val phoneParser = stub[PhoneParser]
+    implicit val phoneParser = stub[PhoneParser]
     (phoneParser.apply _) when "one" returns phone1
 
-    Phone.parse("one", phoneParser) shouldBe phone1
+    Phone.parse("one") shouldBe phone1
   }
 
   behavior of "Phone.loadFromFile"
@@ -38,12 +38,12 @@ class PhoneSpec extends TrainingSpec {
 
   it should "Load from stream, using the parser" in {
     val stream = getClass.getClassLoader.getResourceAsStream("csvForTest.csv")
-    val phoneParser = stub[PhoneParser]
+    implicit val phoneParser = stub[PhoneParser]
     (phoneParser.apply _) when "one" returns phone1
     (phoneParser.apply _) when "two" returns phone2
     (phoneParser.apply _) when "three" returns phone3
 
-    Phone.loadFromStream(stream, phoneParser).toList shouldBe List(phone1, phone2, phone3)
+    Phone.loadFromStream(stream).toList shouldBe List(phone1, phone2, phone3)
   }
 
 }
