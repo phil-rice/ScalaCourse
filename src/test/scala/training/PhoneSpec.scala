@@ -3,7 +3,7 @@ package training
 import org.scalamock.scalatest.MockFactory
 import org.scalatest.{FlatSpec, Matchers}
 
-trait TrainingSpec extends FlatSpec with Matchers with MockFactory
+
 
 trait PhoneFixture {
   val phone1 = Phone(1, "mobile", "+44 123 456 777")
@@ -23,6 +23,9 @@ class PhoneParserSpec extends TrainingSpec {
     defaultPhoneParser("1,mobile,+44 123 456 777") shouldBe Phone(1, "mobile", "+44 123 456 777")
     defaultPhoneParser("3,mobile,  07767 555 5555") shouldBe Phone(3, "mobile", "07767 555 5555")
   }
+  it should "throw an error if it cannot parse the string" in {
+    intercept[PhoneParserException](defaultPhoneParser("some invalid text")).getMessage shouldBe  "Cannot parse some invalid text"
+  }
 }
 
 class PhoneSpec extends TrainingSpec with PhoneFixture {
@@ -30,8 +33,8 @@ class PhoneSpec extends TrainingSpec with PhoneFixture {
   behavior of "Phone.parse"
 
   it should "delegate to PhoneParser" in {
-    implicit val phoneParser = stub[PhoneParser]
-    (phoneParser.apply _) when "one" returns phone1
+    implicit val phoneParser = mock[PhoneParser]
+    (phoneParser.apply _) expects "one" returns phone1
 
     Phone.parse("one") shouldBe phone1
   }
@@ -40,35 +43,11 @@ class PhoneSpec extends TrainingSpec with PhoneFixture {
 
   it should "Load from stream, using the parser" in {
     val stream = getClass.getClassLoader.getResourceAsStream("csvForTest.csv")
-    implicit val phoneParser = stub[PhoneParser]
-    (phoneParser.apply _) when "one" returns phone1
-    (phoneParser.apply _) when "two" returns phone2
-    (phoneParser.apply _) when "three" returns phone3
+    implicit val phoneParser = mock[PhoneParser]
+    (phoneParser.apply _) expects "one" returns phone1
+    (phoneParser.apply _) expects "two" returns phone2
+    (phoneParser.apply _) expects "three" returns phone3
 
     Phone.loadFromStream(stream).toList shouldBe List(phone1, phone2, phone3)
-  }
-}
-
-class PersonParserSpec extends TrainingSpec with PhoneFixture {
-  behavior of "DefaultPersonParser"
-  val defaultPersonParser = implicitly[PersonParser]
-
-  it should "parse people" in {
-    defaultPersonParser("1,Phil", phoneMap) shouldBe Person(1, "Phil", List(phone1, phone2))
-  }
-}
-
-class PersonSpec extends TrainingSpec with PhoneFixture {
-  behavior of "Person.parse"
-
-    val person1 = Person(1, "Phil", List(phone1, phone2))
-    val person2 = Person(2, "Bob", List())
-    val person3 = Person(3, "Jill", List(phone3))
-
-  it should "delegate to PersonParser" in {
-    implicit val phoneParser = stub[PersonParser]
-    (phoneParser.apply _) when("one", phoneMap) returns person1
-
-    Person.parse("one", phoneMap) shouldBe person1
   }
 }
