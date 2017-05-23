@@ -5,12 +5,16 @@ import java.io.InputStream
 import scala.io.Source
 
 
-case class Phone(personId: Int, phoneType: String, number: String) extends ToJson {
-  def toJson = s"""{"type": "$phoneType", "number": "$number"}"""
-}
-
+case class Phone(personId: Int, phoneType: String, number: String)
 
 object Phone {
+  implicit object ToJsonForPhone extends ToJson[Phone] {
+    def apply(phone: Phone) = {
+      import phone._
+      s"""{"type": "$phoneType", "number": "$number"}"""
+    }
+  }
+
 
   implicit object FindIdForPhone extends FindId[Int, Phone] {
     override def apply(p: Phone): Int = p.personId

@@ -1,11 +1,9 @@
 package training
 
-trait ToJson{
-  def toJson: String
-}
-
-
+trait ToJson[T] extends (T => String)
 
 object Json{
-  def apply(j: ToJson) = j.toJson
+  implicit class JsonPimper[T](t: T)(implicit toJsonForT: ToJson[T]){
+    def toJson = toJsonForT(t)
+  }
 }
