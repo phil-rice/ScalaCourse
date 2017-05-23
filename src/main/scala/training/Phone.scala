@@ -9,6 +9,11 @@ case class Phone(personId: Int, phoneType: String, number: String)
 
 
 object Phone {
+
+  implicit object FindIdForPhone extends FindId[Int, Phone] {
+    override def apply(p: Phone): Int = p.personId
+  }
+
   def loadFromStream(stream: InputStream)(implicit phoneParser: PhoneParser): Iterator[Phone] =
     Source.fromInputStream(stream).getLines().map(phoneParser)
 
