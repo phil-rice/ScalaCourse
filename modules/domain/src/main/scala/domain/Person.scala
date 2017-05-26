@@ -1,4 +1,4 @@
-package training
+package domain
 
 import java.io.InputStream
 

@@ -1,8 +1,6 @@
-package training
+package domain
 
-import org.scalamock.scalatest.MockFactory
-import org.scalatest.{FlatSpec, Matchers}
-
+import training.TrainingSpec
 
 
 trait PhoneFixture {

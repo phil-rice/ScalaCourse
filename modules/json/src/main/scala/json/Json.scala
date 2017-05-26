@@ -1,4 +1,4 @@
-package training
+package json
 
 trait ToJson[T] extends (T => String)
 

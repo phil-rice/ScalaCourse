@@ -1,6 +1,6 @@
-package training
+package main
 
-import training.Json._
+import domain.PersonFixture
 
 class PersonJsonSpec extends TrainingSpec with PersonFixture {
 

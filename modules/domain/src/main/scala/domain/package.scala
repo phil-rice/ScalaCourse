@@ -1,5 +1,6 @@
 
-package object training {
+
+package object domain {
 
   type PhoneMap = Map[Int,List[Phone]]
 }

@@ -1,4 +1,4 @@
-package training
+package domain
 
 
 trait PersonFixture extends PhoneFixture{

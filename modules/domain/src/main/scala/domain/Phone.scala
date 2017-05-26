@@ -1,6 +1,8 @@
-package training
+package domain
 
 import java.io.InputStream
+
+import training.FindId
 
 import scala.io.Source
 
@@ -14,7 +16,6 @@ object Phone {
       s"""{"type": "$phoneType", "number": "$number"}"""
     }
   }
-
 
   implicit object FindIdForPhone extends FindId[Int, Phone] {
     override def apply(p: Phone): Int = p.personId
