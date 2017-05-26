@@ -1,7 +1,8 @@
 package main
 
 import domain.PersonFixture
-
+import training.TrainingSpec
+import json.Json._
 class PersonJsonSpec extends TrainingSpec with PersonFixture {
 
   behavior of "Json with 'Person'"

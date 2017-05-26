@@ -8,13 +8,6 @@ import scala.io.Source
 case class Person(id: Int, name: String, phones: List[Phone] = List())
 
 object Person {
-  implicit def toJsonForPerson(implicit toJsonForPhone: ToJson[Phone]) = new ToJson[Person] {
-    def apply(person: Person) = {
-      import person._
-      s"""{"name": "$name", "phones": ${phones.map(toJsonForPhone).mkString("[", ",", "]")}}"""
-    }
-  }
-
   def loadFromStream(phoneMap: PhoneMap)(stream: InputStream)(implicit personParser: PersonParser): Iterator[Person] =
     Source.fromInputStream(stream).getLines().map(personParser(phoneMap))
 

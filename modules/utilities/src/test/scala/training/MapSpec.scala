@@ -2,21 +2,30 @@ package training
 
 import training.Maps._
 
-class MapsSpec extends TrainingSpec with PhoneFixture {
+class MapsSpec extends TrainingSpec  {
+
+  case class TestClassForMaps(id: Int)
+  object TestClassForMaps{
+    implicit object FindIdForTestClassForMaps extends FindId[Int, TestClassForMaps]{
+      override def apply(t: TestClassForMaps): Int = t.id
+    }
+  }
+
+  val (test1, test2, test3) = (TestClassForMaps(1), TestClassForMaps(1), TestClassForMaps(3))
 
   behavior of "Maps.add"
-  val emptyMap = Map[Int, List[Phone]]()
+  val emptyMap = Map[Int, List[TestClassForMaps]]()
 
   it should "allow a person to be added to the empty map" in {
-    emptyMap + phone1 shouldBe Map(1 -> List(phone1))
+    emptyMap + test1 shouldBe Map(1 -> List(test1))
   }
   it should "allow multiple phones to be added" in {
-    emptyMap + phone1 + phone2 shouldBe Map(1 -> List(phone1, phone2))
+    emptyMap + test1 + test2 shouldBe Map(1 -> List(test1, test2))
   }
-  behavior of "Maps.makeFromList"
 
+  behavior of "Maps.makeFromList"
   it should "make a map from a list" in {
-    List(phone1, phone2, phone3).toMapOfLists[Int] shouldBe  Map(1 -> List(phone1, phone2), 3 -> List(phone3))
+    List(test1, test2, test3).toMapOfLists[Int] shouldBe  Map(1 -> List(test1, test2), 3 -> List(test3))
   }
 
 }

@@ -1,5 +1,7 @@
 package domain
 
+import training.TrainingSpec
+
 
 trait PersonFixture extends PhoneFixture{
 

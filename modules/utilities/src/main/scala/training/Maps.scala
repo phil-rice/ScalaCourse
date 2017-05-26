@@ -23,4 +23,7 @@ object Maps {
   implicit class ListPimper[V](list: List[V]){
     def toMapOfLists[K](implicit findId: FindId[K, V]) = makeFromList[K,V](list)
   }
+  implicit class IteratorPimper[V](iterator: Iterator[V]){
+    def toMapOfLists[K](implicit findId: FindId[K, V]) = makeFromList[K,V](iterator.toList)
+  }
 }
