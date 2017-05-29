@@ -13,3 +13,5 @@ object Main extends App {
   val people = Person.loadFromStream(phoneMap)("people.csv")
   people.map(_.toJson).foreach(println)
 }
+
+
